@@ -4,7 +4,7 @@ PySeasNVE
 
 
 .. image:: https://img.shields.io/pypi/v/pyseasnve.svg
-        :target: https://pypi.python.org/pypi/pyseasnve
+        :target: https://pypi.org/project/pyseasnve/
 
 .. image:: https://readthedocs.org/projects/pyseasnve/badge/?version=latest
         :target: https://pyseasnve.readthedocs.io/en/latest/?version=latest
@@ -39,6 +39,9 @@ TODO:
 Usage
 ------------
 .. code-block:: python
+
+        # Install
+        python3 -m pip install -U pyseasnve
 
         # Login
         >>> from pyseasnve import PySeasNVE
