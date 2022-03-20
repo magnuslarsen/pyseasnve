@@ -2,10 +2,18 @@
 
 
 class PySeasNVE:
-    from .core import (best_interval, cheapest_interval, climate_at,
-                       current_co2_intensity, current_green_energy,
-                       current_price, forecast_climate, forecast_price,
-                       greenest_interval, price_at)
+    from .core import (
+        best_interval,
+        cheapest_interval,
+        climate_at,
+        current_co2_intensity,
+        current_green_energy,
+        current_price,
+        forecast_climate,
+        forecast_price,
+        greenest_interval,
+        price_at,
+    )
 
     def __init__(self, username, password):
         from .helpers import init_vars, login
@@ -56,10 +64,18 @@ class PySeasNVE:
 class DummyPySeasNVE:
     """A dummy class for unit testing"""
 
-    from .core import (best_interval, cheapest_interval, climate_at,
-                       current_co2_intensity, current_green_energy,
-                       current_price, forecast_climate, forecast_price,
-                       greenest_interval, price_at)
+    from .core import (
+        best_interval,
+        cheapest_interval,
+        climate_at,
+        current_co2_intensity,
+        current_green_energy,
+        current_price,
+        forecast_climate,
+        forecast_price,
+        greenest_interval,
+        price_at,
+    )
 
     def __init__(self, username, password):
         self.username = username
