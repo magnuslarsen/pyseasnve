@@ -6,22 +6,23 @@ from helpers import add_ints_avg, get_timestamp
 
 
 def forecast_price(self) -> dict:
-    """Returns the price forecast"""
+    """Return the price forecast."""
     return forecast.price(self)
 
 
 def forecast_climate(self) -> dict:
-    """Returns the climate forecast"""
+    """Return the climate forecast."""
     return forecast.climate(self)
 
 
 def current_price(self, type: str = "total") -> None:
-    """
-    Returns the current kwh price (by default the total price)
+    """Return the current kwh price (by default the total price).
 
-    `type` accepts `total` (default), `raw_price`, or `tax`
+    :param self:
+    :param type: one of `total` (default), `raw_price`, or `tax`
+    :type type: str
+    :rtype: None
     """
-
     if type not in ["total", "raw_price", "tax"]:
         raise ValueError("Type is not one of `total`, `raw_price`, or `tax`")
 
@@ -30,24 +31,33 @@ def current_price(self, type: str = "total") -> None:
 
 
 def current_green_energy(self) -> None:
-    """Returns the current green energy percent"""
+    """Return the current green energy percent.
 
+    :param self:
+    :rtype: None
+    """
     climates = forecast.climate(self)
     return climates[int(time.strftime("%H"))]["green_energy_percent"]
 
 
 def current_co2_intensity(self) -> None:
-    """Returns the current co2 intensity"""
+    """Return the current co2 intensity.
 
+    :param self:
+    :rtype: None
+    """
     climates = forecast.climate(self)
     return climates[int(time.strftime("%H"))]["co2_intensity"]
 
 
-def price_at(self, timestamp: str) -> dict:
-    """
-    Returns the price at `timestamp`
+def price_at(self, timestamp: str | int) -> dict:
+    """Return the price at `timestamp`.
 
-    `timestamp` is in the format "2022-03-19T08:00:00"
+    :param self:
+    :param timestamp: a timestamp in the format "2022-03-19T08:00:00"
+        or an hour "8" or "36"
+    :type timestamp: str | int
+    :rtype: dict
     """
     prices = forecast.price(self)
 
@@ -61,12 +71,13 @@ def price_at(self, timestamp: str) -> dict:
 
 
 def climate_at(self, timestamp: str | int) -> dict:
-    """
-    Returns the climate at `timestamp`
+    """Return the climate at `timestamp`.
 
-    `timestamp` is in the format "2022-03-19T08:00:00" or
-    an hour `8` or `36`
-
+    :param self:
+    :param timestamp: a timestamp in the format "2022-03-19T08:00:00"
+        or an hour "8" or "36"
+    :type timestamp: str | int
+    :rtype: dict
     """
     climates = forecast.climate(self)
 
@@ -81,11 +92,15 @@ def climate_at(self, timestamp: str | int) -> dict:
 
 # for *_interval we should consider apartments
 # that can't wash during the night
-def best_interval(self, interval: int = 1, items: int = 3) -> dict:
-    """
-    Returns the greenest/cheapest interval(s) depending
-    on primary motivation, but in case of `both` will always
-    have a slight green bias
+def best_interval(self, interval: int = 1, items: int = 3) -> list:
+    """Return the greenest/cheapest/mixed interval(s) depending on primary motivation.
+
+    :param self:
+    :param interval: how many continuous hours to calculate
+    :type interval: int
+    :param items: how many items to return
+    :type items: int
+    :rtype: list
     """
     if self.motivation == "economy":
         return cheapest_interval(self, interval, items)
@@ -116,9 +131,14 @@ def best_interval(self, interval: int = 1, items: int = 3) -> dict:
 
 
 def cheapest_interval(self, interval: int = 1, items: int = 3) -> list:
-    """
-    Returns the n (`items`) cheapest start_time
-    for the given `interval` (in hours)
+    """Return the cheapest intervals.
+
+    :param self:
+    :param interval: how many continuous hours to calculate
+    :type interval: int
+    :param items: how many items to return
+    :type items: int
+    :rtype: list
     """
     prices = forecast.price(self)
 
@@ -132,9 +152,7 @@ def cheapest_interval(self, interval: int = 1, items: int = 3) -> list:
             for i in range(interval):
                 interval_price += prices[key + i]["kwh_total"]
                 interval_energy.append(
-                    climate_at(self, prices[key + i]["start_time"]).get(
-                        "green_energy_percent", "N/A"
-                    )
+                    climate_at(self, prices[key + i]["start_time"]).get("green_energy_percent", "N/A")
                 )
         except KeyError:
             break
@@ -163,9 +181,14 @@ def cheapest_interval(self, interval: int = 1, items: int = 3) -> list:
 
 
 def greenest_interval(self, interval: int = 1, items: int = 3) -> list:
-    """
-    Returns the n (`items`) greenest start_time
-    for a given `interval` (in hours)
+    """Return the greenest intervals.
+
+    :param self:
+    :param interval: how many continuous hours to calculate
+    :type interval: int
+    :param items: how many items to return
+    :type items: int
+    :rtype: list
     """
     climates = forecast.climate(self)
 
@@ -178,11 +201,7 @@ def greenest_interval(self, interval: int = 1, items: int = 3) -> list:
         try:
             for i in range(interval):
                 interval_energy += climates[key + i]["green_energy_percent"]
-                interval_price.append(
-                    price_at(self, climates[key + i]["start_time"]).get(
-                        "kwh_total", "N/A"
-                    )
-                )
+                interval_price.append(price_at(self, climates[key + i]["start_time"]).get("kwh_total", "N/A"))
         except KeyError:
             break
 
@@ -194,9 +213,7 @@ def greenest_interval(self, interval: int = 1, items: int = 3) -> list:
                 "interval_hours": interval,
                 "interval_avg_kwh_price": price,
                 "interval_avg_kwh_price_estimate": estimate,
-                "interval_avg_green_energy_percent": round(
-                    interval_energy / interval, 2
-                ),
+                "interval_avg_green_energy_percent": round(interval_energy / interval, 2),
                 "interval_avg_green_energy_percent_estimate": False,
             }
         )

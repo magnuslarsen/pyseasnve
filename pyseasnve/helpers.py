@@ -6,8 +6,7 @@ from exceptions import LoginError
 
 
 def login(self, password) -> None:
-    """Attempts to login to the API"""
-
+    """Attempt to login to the API."""
     self._public_ip = public_ip()
 
     body = {"customer": self.username, "password": password}
@@ -29,8 +28,7 @@ def login(self, password) -> None:
 
 
 def init_vars(self) -> None:
-    """Sets all the variables required for all other functions"""
-
+    """Set all the variables required for all other functions."""
     r = requests.get(f"{c.COPI_API}/profile", headers=headers(self))
     r.raise_for_status()
 
@@ -51,7 +49,7 @@ def init_vars(self) -> None:
 
 
 def headers(self) -> dict:
-    """Sets appropiate headers for API calls"""
+    """Set appropiate headers for API calls."""
     return {
         "X-Customer-Ip": self._public_ip,
         "Authorization": self._token,
@@ -59,16 +57,16 @@ def headers(self) -> dict:
 
 
 def public_ip() -> str:
-    """Returns the public ip"""
+    """Return the public ip."""
     return requests.get("https://api.ipify.org").text
 
 
-def add_ints_avg(raw_list: list) -> list:
-    """
-    Returns the average of non-`int`s in `raw_list`. If any `str` is found,
-    add the average for each. Incase only `str` return 0
+def add_ints_avg(raw_list: list) -> set:
+    """Return the average of `raw_list`, trying to estimate if necessary.
 
-    Returns a list in the format `(added_nums_avg: float, estimation: bool)`
+    :param raw_list: a list of numbers and `N/A`s
+    :type raw_list: list
+    :rtype: set
     """
     estimate = False
     num = 0
@@ -94,22 +92,23 @@ def add_ints_avg(raw_list: list) -> list:
     return (round(num, 2), estimate)
 
 
-def get_timestamp(timestamp: int | str) -> str:
+def get_timestamp(t: int | str) -> str:
     """
-    Returns a timestamp for the given hour of `timestamp`,
-    or simply returns `timestamp` if already formatted correctly
-    """
-    if type(timestamp) == int or (type(timestamp) == str and timestamp.isnumeric()):
-        timestamp = int(timestamp)
+    Return `t` or the timestamp at hour `t` if only an hour was provided.
 
-        if timestamp > 24:
+    :param t: a timestamp or an hour
+    :type t: int | str
+    :rtype: str
+    """
+    if type(t) == int or (type(t) == str and t.isnumeric()):
+        t = int(t)
+
+        if t > 24:
             day = int(time.strftime("%d")) + 1
-            hour = timestamp - 24
+            hour = t - 24
 
-            return time.strftime(
-                f"%Y-%m-{str(day).zfill(2)}T{str(hour).zfill(2)}:00:00"
-            )
+            return time.strftime(f"%Y-%m-{str(day).zfill(2)}T{str(hour).zfill(2)}:00:00")
         else:
-            return time.strftime(f"%Y-%m-%dT{str(timestamp).zfill(2)}:00:00")
+            return time.strftime(f"%Y-%m-%dT{str(t).zfill(2)}:00:00")
 
-    return timestamp
+    return t

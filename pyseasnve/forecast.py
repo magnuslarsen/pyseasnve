@@ -8,11 +8,12 @@ from pytz import timezone
 
 
 def is_cached(cache_obj: dict) -> bool:
-    """
-    Returns `True` if `cache_obj` contains valid cached data,
-    else `False`
-    """
+    """Check if `cache_obj` is cached.
 
+    :param cache_obj: a intance variable where data could be cached
+    :type cache_obj: dict
+    :rtype: bool
+    """
     if len(cache_obj) > 0:
         hour = datetime.datetime.now().hour
         if hour == 0 and cache_obj["cached_hour"] != 0:
@@ -24,8 +25,7 @@ def is_cached(cache_obj: dict) -> bool:
 
 
 def price(self) -> dict:
-    """Gets the price forecast"""
-
+    """Get the price forecast."""
     if is_cached(self._cached_forecast_price):
         return self._cached_forecast_price["data"]
 
@@ -84,8 +84,7 @@ def price(self) -> dict:
 
 
 def climate(self) -> dict:
-    """Gets the climate forecast"""
-
+    """Get the climate forecast."""
     if is_cached(self._cached_forecast_climate):
         return self._cached_forecast_climate["data"]
 

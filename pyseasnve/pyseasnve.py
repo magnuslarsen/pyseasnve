@@ -43,9 +43,7 @@ class PySeasNVE:
         if m in ["economy", "environment", "both"]:
             self._motivation = m
         else:
-            raise ValueError(
-                "motivation can only be one of `economy`, `environment`, or `both`"
-            )
+            raise ValueError("motivation can only be one of `economy`, `environment`, or `both`")
 
     @property
     def accommodation_type(self):
