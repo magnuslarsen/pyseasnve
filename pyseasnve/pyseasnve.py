@@ -1,10 +1,6 @@
 """Main module."""
 
 
-class LoginError(Exception):
-    pass
-
-
 class PySeasNVE:
     from .core import (best_interval, cheapest_interval, climate_at,
                        current_co2_intensity, current_green_energy,
@@ -55,3 +51,24 @@ class PySeasNVE:
             self._accommodation_type = t
         else:
             raise ValueError("accommodation_type can only be `apartment` or `house`")
+
+
+class DummyPySeasNVE:
+    """A dummy class for unit testing"""
+
+    from .core import (best_interval, cheapest_interval, climate_at,
+                       current_co2_intensity, current_green_energy,
+                       current_price, forecast_climate, forecast_price,
+                       greenest_interval, price_at)
+
+    def __init__(self, username, password):
+        self.username = username
+
+        self._token = "dummy_token"
+        self._grid_area = "DK-2"
+        self._zip_code = "2000"
+        self._public_ip = "127.0.0.1"
+        self._accommodation_type = "apartment"
+        self._motivation = "both"
+        self._cached_forecast_climate = {}
+        self._cached_forecast_price = {}
