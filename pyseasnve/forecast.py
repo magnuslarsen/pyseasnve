@@ -1,10 +1,11 @@
 import datetime
 import time
 
-import constants as c
-import helpers as h
 import requests
 from pytz import timezone
+
+from .constants import CLIMATE_API, KEY_TIMESTAMP_FMT, PRICE_API
+from .helpers import headers
 
 
 def is_cached(cache_obj: dict) -> bool:
@@ -30,8 +31,8 @@ def price(self) -> dict:
         return self._cached_forecast_price["data"]
 
     r = requests.get(
-        f"{c.PRICE_API}/forward-prices/{self._zip_code}",
-        headers=h.headers(self),
+        f"{PRICE_API}/forward-prices/{self._zip_code}",
+        headers=headers(self),
     )
     json = r.json()
 
@@ -68,7 +69,7 @@ def price(self) -> dict:
             key = i
 
         prices[key] = {
-            "start_time": t.strftime(c.KEY_TIMESTAMP_FMT),
+            "start_time": t.strftime(KEY_TIMESTAMP_FMT),
             "kwh_raw_price": kwh_raw_price,
             "kwh_tax": kwh_tax,
             "kwh_total": kwh_total,
@@ -89,8 +90,8 @@ def climate(self) -> dict:
         return self._cached_forecast_climate["data"]
 
     r = requests.get(
-        f"{c.CLIMATE_API}/energydata/DK-{self._grid_area}",
-        headers=h.headers(self),
+        f"{CLIMATE_API}/energydata/DK-{self._grid_area}",
+        headers=headers(self),
     )
     json = r.json()
 
@@ -135,7 +136,7 @@ def climate(self) -> dict:
             key = t.hour
 
         climates[key] = {
-            "start_time": t.strftime(c.KEY_TIMESTAMP_FMT),
+            "start_time": t.strftime(KEY_TIMESTAMP_FMT),
             "green_energy_percent": c_green_energy_percent,
             "co2_intensity": i["co2_intensity"],
             "consumption_breakdown_percent": {

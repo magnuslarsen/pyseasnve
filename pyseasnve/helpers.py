@@ -1,8 +1,9 @@
 import time
 
-import constants as c
 import requests
-from exceptions import LoginError
+
+from .constants import COPI_API, PRICE_API
+from .exceptions import LoginError
 
 
 def login(self, password) -> None:
@@ -13,7 +14,7 @@ def login(self, password) -> None:
 
     try:
         r = requests.post(
-            f"{c.PRICE_API}/authenticate",
+            f"{PRICE_API}/authenticate",
             data=body,
             headers=headers(self),
         )
@@ -29,7 +30,7 @@ def login(self, password) -> None:
 
 def init_vars(self) -> None:
     """Set all the variables required for all other functions."""
-    r = requests.get(f"{c.COPI_API}/profile", headers=headers(self))
+    r = requests.get(f"{COPI_API}/profile", headers=headers(self))
     r.raise_for_status()
 
     json = r.json()
@@ -39,7 +40,7 @@ def init_vars(self) -> None:
 
     # grid_area is only mentioned in forward-prices...
     r = requests.get(
-        f"{c.PRICE_API}/forward-prices/{self._zip_code}",
+        f"{PRICE_API}/forward-prices/{self._zip_code}",
         headers=headers(self),
     )
     r.raise_for_status()
@@ -64,7 +65,7 @@ def public_ip() -> str:
 def add_ints_avg(raw_list: list) -> set:
     """Return the average of `raw_list`, trying to estimate if necessary.
 
-    :param raw_list: a list of numbers and `N/A`s
+    :param raw_list: a list of numbers and "N/A"s
     :type raw_list: list
     :rtype: set
     """

@@ -5,7 +5,7 @@
 
 import unittest
 
-from pyseasnve import pyseasnve
+from pyseasnve import PySeasNVE
 
 
 class TestPyseasnve(unittest.TestCase):

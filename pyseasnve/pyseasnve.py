@@ -6,13 +6,13 @@ class LoginError(Exception):
 
 
 class PySeasNVE:
-    from core import (best_interval, cheapest_interval, climate_at,
-                      current_co2_intensity, current_green_energy,
-                      current_price, forecast_climate, forecast_price,
-                      greenest_interval, price_at)
+    from .core import (best_interval, cheapest_interval, climate_at,
+                       current_co2_intensity, current_green_energy,
+                       current_price, forecast_climate, forecast_price,
+                       greenest_interval, price_at)
 
     def __init__(self, username, password):
-        import helpers as h
+        from .helpers import init_vars, login
 
         self.username = username
 
@@ -29,10 +29,10 @@ class PySeasNVE:
         self._motivation = ""
 
         # Login instantly, skipping saving the plain text password in self
-        h.login(self, password)
+        login(self, password)
 
         # Preload variables
-        h.init_vars(self)
+        init_vars(self)
 
     @property
     def motivation(self):

@@ -1,21 +1,21 @@
 import time
 from math import ceil, floor
 
-import forecast
-from helpers import add_ints_avg, get_timestamp
+from .forecast import climate, price
+from .helpers import add_ints_avg, get_timestamp
 
 
 def forecast_price(self) -> dict:
-    """Return the price forecast."""
-    return forecast.price(self)
+    """Return the price"""
+    return price(self)
 
 
 def forecast_climate(self) -> dict:
-    """Return the climate forecast."""
-    return forecast.climate(self)
+    """Return the climate"""
+    return climate(self)
 
 
-def current_price(self, type: str = "total") -> None:
+def current_price(self, type: str = "total") -> float:
     """Return the current kwh price (by default the total price).
 
     :param self:
@@ -26,27 +26,27 @@ def current_price(self, type: str = "total") -> None:
     if type not in ["total", "raw_price", "tax"]:
         raise ValueError("Type is not one of `total`, `raw_price`, or `tax`")
 
-    prices = forecast.price(self)
+    prices = price(self)
     return prices[int(time.strftime("%H"))][f"kwh_{type}"]
 
 
-def current_green_energy(self) -> None:
+def current_green_energy(self) -> float:
     """Return the current green energy percent.
 
     :param self:
     :rtype: None
     """
-    climates = forecast.climate(self)
+    climates = climate(self)
     return climates[int(time.strftime("%H"))]["green_energy_percent"]
 
 
-def current_co2_intensity(self) -> None:
+def current_co2_intensity(self) -> int:
     """Return the current co2 intensity.
 
     :param self:
     :rtype: None
     """
-    climates = forecast.climate(self)
+    climates = climate(self)
     return climates[int(time.strftime("%H"))]["co2_intensity"]
 
 
@@ -59,7 +59,7 @@ def price_at(self, timestamp: str | int) -> dict:
     :type timestamp: str | int
     :rtype: dict
     """
-    prices = forecast.price(self)
+    prices = price(self)
 
     timestamp = get_timestamp(timestamp)
 
@@ -79,7 +79,7 @@ def climate_at(self, timestamp: str | int) -> dict:
     :type timestamp: str | int
     :rtype: dict
     """
-    climates = forecast.climate(self)
+    climates = climate(self)
 
     timestamp = get_timestamp(timestamp)
 
@@ -140,7 +140,7 @@ def cheapest_interval(self, interval: int = 1, items: int = 3) -> list:
     :type items: int
     :rtype: list
     """
-    prices = forecast.price(self)
+    prices = price(self)
 
     cheap_keys = list()
 
@@ -190,7 +190,7 @@ def greenest_interval(self, interval: int = 1, items: int = 3) -> list:
     :type items: int
     :rtype: list
     """
-    climates = forecast.climate(self)
+    climates = climate(self)
 
     green_keys = list()
 
