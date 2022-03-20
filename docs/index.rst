@@ -7,7 +7,6 @@ Welcome to PySeasNVE's documentation!
 
    readme
    installation
-   usage
    modules
    contributing
    authors

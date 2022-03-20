@@ -6,9 +6,6 @@ PySeasNVE
 .. image:: https://img.shields.io/pypi/v/pyseasnve.svg
         :target: https://pypi.python.org/pypi/pyseasnve
 
-.. image:: https://img.shields.io/travis/magnuslarsen/pyseasnve.svg
-        :target: https://travis-ci.com/magnuslarsen/pyseasnve
-
 .. image:: https://readthedocs.org/projects/pyseasnve/badge/?version=latest
         :target: https://pyseasnve.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
@@ -39,7 +36,7 @@ TODO:
 * Possibility to set configuration values via the API
 
 
-Introduction
+Usage
 ------------
 .. code-block:: python
 
@@ -66,6 +63,18 @@ Introduction
         # Or simply use the "best" method, depending on your motivation in SEAS-NVE
         >>> seas.best_interval()
         [{'start_time': '2022-03-20T12:00:00', 'interval_hours': 1, 'interval_avg_kwh_price': 1.57, 'interval_avg_kwh_price_estimate': False, 'interval_avg_green_energy_percent': 75.68, 'interval_avg_green_energy_percent_estimate': False}, {'start_time': '2022-03-20T13:00:00', 'interval_hours': 1, 'interval_avg_kwh_price': 1.57, 'interval_avg_kwh_price_estimate': False, 'interval_avg_green_energy_percent': 75.68, 'interval_avg_green_energy_percent_estimate': False}, {'start_time': '2022-03-20T14:00:00', 'interval_hours': 1, 'interval_avg_kwh_price': 1.57, 'interval_avg_kwh_price_estimate': False, 'interval_avg_green_energy_percent': 75.68, 'interval_avg_green_energy_percent_estimate': False}]
+
+You can access the forecasts directly aswell, to write you own wrapper code around it.
+If you find something is missing, please raise an issue or submit the code :-)
+
+
+.. code-block:: python
+
+        >>> seas.forecast_price()
+        # output not shown
+        >>> seas.forecast_climate()
+        # output not shown
+
 
 Credits
 -------

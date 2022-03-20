@@ -1,5 +1,6 @@
 import time
 from math import ceil, floor
+from typing import Union
 
 from .forecast import climate, price
 from .helpers import add_ints_avg, get_timestamp
@@ -21,7 +22,7 @@ def current_price(self, type: str = "total") -> float:
     :param self:
     :param type: one of `total` (default), `raw_price`, or `tax`
     :type type: str
-    :rtype: None
+    :rtype: float
     """
     if type not in ["total", "raw_price", "tax"]:
         raise ValueError("Type is not one of `total`, `raw_price`, or `tax`")
@@ -34,7 +35,7 @@ def current_green_energy(self) -> float:
     """Return the current green energy percent.
 
     :param self:
-    :rtype: None
+    :rtype: float
     """
     climates = climate(self)
     return climates[int(time.strftime("%H"))]["green_energy_percent"]
@@ -44,13 +45,13 @@ def current_co2_intensity(self) -> int:
     """Return the current co2 intensity.
 
     :param self:
-    :rtype: None
+    :rtype: int
     """
     climates = climate(self)
     return climates[int(time.strftime("%H"))]["co2_intensity"]
 
 
-def price_at(self, timestamp: str | int) -> dict:
+def price_at(self, timestamp: Union[str, int]) -> dict:
     """Return the price at `timestamp`.
 
     :param self:
@@ -70,7 +71,7 @@ def price_at(self, timestamp: str | int) -> dict:
     return {}
 
 
-def climate_at(self, timestamp: str | int) -> dict:
+def climate_at(self, timestamp: Union[str, int]) -> dict:
     """Return the climate at `timestamp`.
 
     :param self:

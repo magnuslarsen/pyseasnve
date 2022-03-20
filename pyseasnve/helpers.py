@@ -1,4 +1,5 @@
 import time
+from typing import Union
 
 import requests
 
@@ -93,7 +94,7 @@ def add_ints_avg(raw_list: list) -> set:
     return (round(num, 2), estimate)
 
 
-def get_timestamp(t: int | str) -> str:
+def get_timestamp(t: Union[str, int]) -> str:
     """
     Return `t` or the timestamp at hour `t` if only an hour was provided.
 
