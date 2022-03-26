@@ -178,3 +178,38 @@ class TestPyseasnve(unittest.TestCase):
         actual_result = self.seas.cheapest_interval(2, 2)
 
         self.assertListEqual(actual_result, expected_result)
+
+    def test_climate_at_timestamp(self):
+        """Test the climate_at function, using a timestamp"""
+        expected_result = {
+            "start_time": "2022-03-20T15:00:00",
+            "green_energy_percent": 80.68,
+            "co2_intensity": 194,
+            "consumption_breakdown_percent": {
+                "biomass": 18.64,
+                "coal": 16.9,
+                "gas": 5.41,
+                "geothermal": 0.0,
+                "hydro": 13.09,
+                "nuclear": 10.02,
+                "oil": 0.0,
+                "solar": 3.94,
+                "wind": 29.99,
+                "unknown": 2.0,
+            },
+        }
+        actual_result = self.seas.climate_at("2022-03-20T15:00:00")
+
+        self.assertDictEqual(actual_result, expected_result)
+
+    def test_price_at_timestamp(self):
+        """Test the price_at function, using a timestamp"""
+        expected_result = {
+            "start_time": "2022-03-20T14:00:00",
+            "kwh_raw_price": 0.18,
+            "kwh_tax": 1.59,
+            "kwh_total": 1.77,
+        }
+        actual_result = self.seas.price_at("2022-03-20T14:00:00")
+
+        self.assertDictEqual(actual_result, expected_result)

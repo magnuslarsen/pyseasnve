@@ -17,9 +17,9 @@ def forecast_climate(self) -> dict:
 
 
 def current_price(self, type: str = "total") -> float:
-    """Return the current kwh price (by default the total price).
+    """Return the current price (by default the total price) in DKK/kWh.
 
-    :param self:
+    :param self: self
     :param type: one of `total` (default), `raw_price`, or `tax`
     :type type: str
     :rtype: float
@@ -32,9 +32,9 @@ def current_price(self, type: str = "total") -> float:
 
 
 def current_green_energy(self) -> float:
-    """Return the current green energy percent.
+    """Return the current green energy in percent.
 
-    :param self:
+    :param self: self
     :rtype: float
     """
     climates = climate(self)
@@ -42,9 +42,9 @@ def current_green_energy(self) -> float:
 
 
 def current_co2_intensity(self) -> int:
-    """Return the current co2 intensity.
+    """Return the current co2 intensity in gCO2eq/kWh.
 
-    :param self:
+    :param self: self
     :rtype: int
     """
     climates = climate(self)
@@ -54,7 +54,7 @@ def current_co2_intensity(self) -> int:
 def price_at(self, timestamp: Union[str, int]) -> dict:
     """Return the price at `timestamp`.
 
-    :param self:
+    :param self: self
     :param timestamp: a timestamp in the format "2022-03-19T08:00:00"
         or an hour "8" or "36"
     :type timestamp: str | int
@@ -74,7 +74,7 @@ def price_at(self, timestamp: Union[str, int]) -> dict:
 def climate_at(self, timestamp: Union[str, int]) -> dict:
     """Return the climate at `timestamp`.
 
-    :param self:
+    :param self: self
     :param timestamp: a timestamp in the format "2022-03-19T08:00:00"
         or an hour "8" or "36"
     :type timestamp: str | int
@@ -96,7 +96,7 @@ def climate_at(self, timestamp: Union[str, int]) -> dict:
 def best_interval(self, interval: int = 1, items: int = 3) -> list:
     """Return the greenest/cheapest/mixed interval(s) depending on primary motivation.
 
-    :param self:
+    :param self: self
     :param interval: how many continuous hours to calculate
     :type interval: int
     :param items: how many items to return
@@ -134,7 +134,7 @@ def best_interval(self, interval: int = 1, items: int = 3) -> list:
 def cheapest_interval(self, interval: int = 1, items: int = 3) -> list:
     """Return the cheapest intervals.
 
-    :param self:
+    :param self: self
     :param interval: how many continuous hours to calculate
     :type interval: int
     :param items: how many items to return
@@ -184,7 +184,7 @@ def cheapest_interval(self, interval: int = 1, items: int = 3) -> list:
 def greenest_interval(self, interval: int = 1, items: int = 3) -> list:
     """Return the greenest intervals.
 
-    :param self:
+    :param self: self
     :param interval: how many continuous hours to calculate
     :type interval: int
     :param items: how many items to return
