@@ -1,7 +1,9 @@
+import datetime
 import time
 from typing import Union
 
 import requests
+from pytz import timezone
 
 from .constants import COPI_API, PRICE_API
 from .exceptions import LoginError
@@ -27,6 +29,7 @@ def login(self, password) -> None:
 
     self._token = json["token"]
     self._zip_code = json["address"]["zip_code"]
+    self._external_id = json["external_id"]
 
 
 def init_vars(self) -> None:
@@ -94,6 +97,23 @@ def add_ints_avg(raw_list: list) -> set:
     return (round(num, 2), estimate)
 
 
+def is_cached(cache_obj: dict) -> bool:
+    """Check if `cache_obj` is cached.
+
+    :param cache_obj: an instance variable where data could be cached
+    :type cache_obj: dict
+    :rtype: bool
+    """
+    if len(cache_obj) > 0:
+        hour = datetime.datetime.now().hour
+        if hour == 0 and cache_obj["cached_hour"] != 0:
+            return False
+        else:
+            return True
+    else:
+        return False
+
+
 def get_timestamp(t: Union[str, int]) -> str:
     """
     Return `t` or the timestamp at hour `t` if only an hour was provided.
@@ -114,3 +134,22 @@ def get_timestamp(t: Union[str, int]) -> str:
             return time.strftime(f"%Y-%m-%dT{str(t).zfill(2)}:00:00")
 
     return t
+
+
+def utc_to_dk(timestamp: str, pattern: str = "%Y-%m-%dT%H:%M:%S.%fZ") -> datetime.datetime:
+    """Convert a UTC timestamp to a Danish timestamp.
+
+    :param timestamp: a UTC timestamp to convert to GMT+1 (and optionally + DST)
+    :type timestamp: str
+    :param pattern: the pattern to much in strptime()
+    :type pattern: str
+    :rtype: datetime.datetime
+    """
+    t = datetime.datetime.strptime(timestamp, pattern)
+
+    # So we should correct it to apply Danish time
+    t = t.astimezone(timezone("Europe/Copenhagen"))
+
+    offset = t.utcoffset().seconds
+
+    return t + datetime.timedelta(seconds=offset)

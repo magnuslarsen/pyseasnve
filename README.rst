@@ -32,7 +32,7 @@ Features
 TODO:
 
 * Billing stats?
-* Long-term stats (i.e. weekly/monthly/yearly usage)
+* Long-term stats (i.e. weekly/monthly/yearly usage) (50% done)
 * Possibility to set configuration values via the API
 
 

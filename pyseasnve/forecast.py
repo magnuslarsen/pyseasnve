@@ -2,27 +2,9 @@ import datetime
 import time
 
 import requests
-from pytz import timezone
 
 from .constants import CLIMATE_API, KEY_TIMESTAMP_FMT, PRICE_API
-from .helpers import headers
-
-
-def is_cached(cache_obj: dict) -> bool:
-    """Check if `cache_obj` is cached.
-
-    :param cache_obj: a intance variable where data could be cached
-    :type cache_obj: dict
-    :rtype: bool
-    """
-    if len(cache_obj) > 0:
-        hour = datetime.datetime.now().hour
-        if hour == 0 and cache_obj["cached_hour"] != 0:
-            return False
-        else:
-            return True
-    else:
-        return False
+from .helpers import headers, is_cached, utc_to_dk
 
 
 def price(self) -> dict:
@@ -42,7 +24,13 @@ def price(self) -> dict:
     tax_prices = json["distribution_prices"][0]["prices"]
 
     for i in range(48):
-        o = json[str(i)]
+        # Sometimes they don't bring all 48 hours
+        # Break out early in such case
+        try:
+            o = json[str(i)]
+        except KeyError:
+            break
+
         t = datetime.datetime.strptime(o["valid_from"], "%Y-%m-%d %H:%M:%S")
 
         mday = int(time.strftime("%d"))
@@ -99,13 +87,9 @@ def climate(self) -> dict:
     climates = {}
 
     for i in sorted_climate:
-        # For climates, they output dates in GMT+0 (one hour behind)
-        t = datetime.datetime.strptime(i["start"], "%Y-%m-%dT%H:%M:%S.%fZ")
-
-        # So we should correct it to apply Danish time
-        t = t.astimezone(timezone("Europe/Copenhagen"))
+        # For climates, they output dates in UTC
+        t = utc_to_dk(i["start"])
         offset = t.utcoffset().seconds
-        t = t + datetime.timedelta(seconds=offset)
 
         mday = int(time.strftime("%d"))
         hour = int(time.strftime("%H")) - offset / 3600  # also correct time.now()

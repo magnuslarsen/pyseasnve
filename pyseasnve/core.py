@@ -4,6 +4,7 @@ from typing import Union
 
 from .forecast import climate, price
 from .helpers import add_ints_avg, get_timestamp
+from .consumption import consumption
 
 
 def forecast_price(self) -> dict:
@@ -14,6 +15,11 @@ def forecast_price(self) -> dict:
 def forecast_climate(self) -> dict:
     """Return the climate"""
     return climate(self)
+
+
+def consumption_stats(self, resolution: str = "weekly") -> list:
+    """Return the consumption usage"""
+    return consumption(self, resolution)
 
 
 def current_price(self, type: str = "total") -> float:

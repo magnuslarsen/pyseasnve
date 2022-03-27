@@ -6,6 +6,7 @@ class PySeasNVE:
         best_interval,
         cheapest_interval,
         climate_at,
+        consumption_stats,
         current_co2_intensity,
         current_green_energy,
         current_price,
@@ -25,8 +26,14 @@ class PySeasNVE:
         self._grid_area = ""
         self._zip_code = ""
         self._public_ip = ""
+        self._external_id = ""
         self._cached_forecast_price = {}
         self._cached_forecast_climate = {}
+        self._cached_consumption_hourly = {}
+        self._cached_consumption_daily = {}
+        self._cached_consumption_weekly = {}
+        self._cached_consumption_monthly = {}
+        self._cached_consumption_yearly = {}
 
         # Properties
         self._accommodation_type = ""
@@ -86,5 +93,11 @@ class DummyPySeasNVE:
         self._public_ip = "127.0.0.1"
         self._accommodation_type = "apartment"
         self._motivation = "both"
+        self._external_id = "123-123"
         self._cached_forecast_climate = {}
         self._cached_forecast_price = {}
+        self._cached_consumption_hourly = {}
+        self._cached_consumption_daily = {}
+        self._cached_consumption_weekly = {}
+        self._cached_consumption_monthly = {}
+        self._cached_consumption_yearly = {}
