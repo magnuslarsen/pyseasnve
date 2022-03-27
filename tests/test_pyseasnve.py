@@ -17,9 +17,9 @@ class TestPyseasnve(unittest.TestCase):
         self.seas._cached_forecast_price = {
             "cached_hour": 13,
             "data": {
-                13: {"start_time": "2022-03-20T13:00:00", "kwh_raw_price": 0.01, "kwh_tax": 1.56, "kwh_total": 1.57},
-                14: {"start_time": "2022-03-20T14:00:00", "kwh_raw_price": 0.18, "kwh_tax": 1.59, "kwh_total": 1.77},
-                15: {"start_time": "2022-03-20T15:00:00", "kwh_raw_price": 0.18, "kwh_tax": 2.01, "kwh_total": 2.19},
+                13: {"start_time": "2022-03-20T13:00:00", "kwh_raw_price": 0.01, "kwh_tariffs": 1.56, "kwh_total": 1.57},
+                14: {"start_time": "2022-03-20T14:00:00", "kwh_raw_price": 0.18, "kwh_tariffs": 1.59, "kwh_total": 1.77},
+                15: {"start_time": "2022-03-20T15:00:00", "kwh_raw_price": 0.18, "kwh_tariffs": 2.01, "kwh_total": 2.19},
             },
         }
         self.seas._cached_forecast_climate = {
@@ -207,7 +207,7 @@ class TestPyseasnve(unittest.TestCase):
         expected_result = {
             "start_time": "2022-03-20T14:00:00",
             "kwh_raw_price": 0.18,
-            "kwh_tax": 1.59,
+            "kwh_tariffs": 1.59,
             "kwh_total": 1.77,
         }
         actual_result = self.seas.price_at("2022-03-20T14:00:00")

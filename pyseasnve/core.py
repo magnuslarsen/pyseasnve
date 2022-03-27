@@ -26,12 +26,12 @@ def current_price(self, type: str = "total") -> float:
     """Return the current price (by default the total price) in DKK/kWh.
 
     :param self: self
-    :param type: one of `total` (default), `raw_price`, or `tax`
+    :param type: one of `total` (default), `raw_price`, or `tariffs`
     :type type: str
     :rtype: float
     """
-    if type not in ["total", "raw_price", "tax"]:
-        raise ValueError("Type is not one of `total`, `raw_price`, or `tax`")
+    if type not in ["total", "raw_price", "tariffs"]:
+        raise ValueError("Type is not one of `total`, `raw_price`, or `tariffs`")
 
     prices = price(self)
     return prices[int(time.strftime("%H"))][f"kwh_{type}"]

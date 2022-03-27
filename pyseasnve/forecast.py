@@ -18,10 +18,10 @@ def price(self) -> dict:
     )
     json = r.json()
 
-    # dict.$HOUR is electric prices without taxes
-    # dict.distribution_prices are taxes, but only for today (?)
+    # dict.$HOUR is electric prices without tariffs
+    # dict.distribution_prices are tariffs, but only for today (?)
     prices = {}
-    tax_prices = json["distribution_prices"][0]["prices"]
+    tariff_prices = json["distribution_prices"][0]["prices"]
 
     for i in range(48):
         # Sometimes they don't bring all 48 hours
@@ -40,14 +40,14 @@ def price(self) -> dict:
             continue
 
         if i >= 24:
-            # The tax price only has hours for today (?); it looks like
+            # The tariff price only has hours for today (?); it looks like
             # they are reusing the prices again for tomorrow
-            kwh_tax = round(tax_prices[i - 24]["price"]) / 100
+            kwh_tariffs = round(tariff_prices[i - 24]["price"]) / 100
         else:
-            kwh_tax = round(tax_prices[i]["price"]) / 100
+            kwh_tariffs = round(tariff_prices[i]["price"]) / 100
 
         kwh_raw_price = round(o["price"]) / 100
-        kwh_total = round(kwh_raw_price + kwh_tax, 2)
+        kwh_total = round(kwh_raw_price + kwh_tariffs, 2)
 
         # The API only updates prices every other day it seems.
         # Correct in case we start at 2nd day of prices
@@ -59,7 +59,7 @@ def price(self) -> dict:
         prices[key] = {
             "start_time": t.strftime(KEY_TIMESTAMP_FMT),
             "kwh_raw_price": kwh_raw_price,
-            "kwh_tax": kwh_tax,
+            "kwh_tariffs": kwh_tariffs,
             "kwh_total": kwh_total,
         }
 

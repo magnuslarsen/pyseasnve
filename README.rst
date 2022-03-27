@@ -57,9 +57,9 @@ Usage
 
         # Get the price & climate at some hour
         >>> seas.price_at(9)
-        {'start_time': '2022-03-26T09:00:00', 'kwh_raw_price': 1.48, 'kwh_tax': 1.56, 'kwh_total': 3.04}
+        {'start_time': '2022-03-26T09:00:00', 'kwh_raw_price': 1.48, 'kwh_tariffs': 1.56, 'kwh_total': 3.04}
         >>> seas.price_at("2022-03-26T18:00:00")
-        {'start_time': '2022-03-26T18:00:00', 'kwh_raw_price': 2.44, 'kwh_tax': 2.05, 'kwh_total': 4.49}
+        {'start_time': '2022-03-26T18:00:00', 'kwh_raw_price': 2.44, 'kwh_tariffs': 2.05, 'kwh_total': 4.49}
 
         >>> seas.climate_at(26)
         {'start_time': '2022-03-27T02:00:00', 'green_energy_percent': 68.7, 'co2_intensity': 251, 'consumption_breakdown_percent': {'biomass': 23.94, 'coal': 21.6, 'gas': 8.36, 'geothermal': 0.0, 'hydro': 1.7, 'nuclear': 7.22, 'oil': 0.0, 'solar': 2.83, 'wind': 33.0, 'unknown': 1.35}}
