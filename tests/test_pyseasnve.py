@@ -14,9 +14,9 @@ class TestPyseasnve(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures, if any."""
         self.seas = DummyPySeasNVE("test", "test")
-        self.seas._cached_forecast_price = {
-            "cached_hour": 13,
-            "data": {
+        self.seas._cache.set(
+            "forecast_price",
+            {
                 13: {
                     "start_time": "2022-03-20T13:00:00",
                     "kwh_raw_price": 0.01,
@@ -36,10 +36,10 @@ class TestPyseasnve(unittest.TestCase):
                     "kwh_total": 2.19,
                 },
             },
-        }
-        self.seas._cached_forecast_climate = {
-            "cached_hour": 13,
-            "data": {
+        )
+        self.seas._cache.set(
+            "forecast_climate",
+            {
                 13: {
                     "start_time": "2022-03-20T13:00:00",
                     "green_energy_percent": 85.68,
@@ -92,7 +92,7 @@ class TestPyseasnve(unittest.TestCase):
                     },
                 },
             },
-        }
+        )
 
     def tearDown(self):
         """Tear down test fixtures, if any."""
