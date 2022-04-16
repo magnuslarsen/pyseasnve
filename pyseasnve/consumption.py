@@ -3,7 +3,7 @@ import datetime
 import requests
 
 from .constants import COPI_API, KEY_TIMESTAMP_FMT
-from .helpers import headers, is_cached, utc_to_dk
+from .helpers import headers, utc_to_dk
 
 
 def pretty_label(t: datetime.datetime, resolution: str) -> str:
@@ -34,7 +34,7 @@ def pretty_label(t: datetime.datetime, resolution: str) -> str:
 
 
 def consumption(self, resolution: str = "weekly") -> list:
-    """Return previous consumtion stats, using desired resoution
+    """Return previous consumption stats, using desired resoution
 
     :param self: self
     :param resolution: one of 'hourly', 'daily', 'weekly', 'monthly', 'yearly'
@@ -44,17 +44,8 @@ def consumption(self, resolution: str = "weekly") -> list:
     if resolution not in ["hourly", "daily", "weekly", "monthly", "yearly"]:
         raise ValueError("resolution is not one of 'hourly', 'daily', 'weekly', 'monthly', 'yearly'")
 
-    # TODO: there has to be a better way for this
-    if resolution == "hourly" and is_cached(self._cached_consumption_hourly):
-        return self._cached_consumption_hourly["data"]
-    elif resolution == "daily" and is_cached(self._cached_consumption_daily):
-        return self._cached_consumption_daily["data"]
-    elif resolution == "weekly" and is_cached(self._cached_consumption_weekly):
-        return self._cached_consumption_weekly["data"]
-    elif resolution == "monthly" and is_cached(self._cached_consumption_monthly):
-        return self._cached_consumption_monthly["data"]
-    elif resolution == "yearly" and is_cached(self._cached_consumption_yearly):
-        return self._cached_consumption_yearly["data"]
+    if self._cache.is_cached(f"consumption_{resolution}"):
+        return self._cache.get(f"consumption_{resolution}")
 
     r = requests.get(f"{COPI_API}/consumptionPage/{self._external_id}/{resolution}", headers=headers(self))
     r.raise_for_status()
@@ -75,30 +66,6 @@ def consumption(self, resolution: str = "weekly") -> list:
             }
         )
 
-    if resolution == "hourly":
-        self._cached_consumption_hourly = {
-            "cached_hour": datetime.datetime.now().hour,
-            "data": data,
-        }
-    elif resolution == "daily":
-        self._cached_consumption_daily = {
-            "cached_hour": datetime.datetime.now().hour,
-            "data": data,
-        }
-    elif resolution == "weekly":
-        self._cached_consumption_weekly = {
-            "cached_hour": datetime.datetime.now().hour,
-            "data": data,
-        }
-    elif resolution == "monthly":
-        self._cached_consumption_monthly = {
-            "cached_hour": datetime.datetime.now().hour,
-            "data": data,
-        }
-    elif resolution == "yearly":
-        self._cached_consumption_yearly = {
-            "cached_hour": datetime.datetime.now().hour,
-            "data": data,
-        }
+    self._cache.set(f"consumption_{resolution}", data)
 
     return data

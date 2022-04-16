@@ -4,13 +4,13 @@ import time
 import requests
 
 from .constants import CLIMATE_API, KEY_TIMESTAMP_FMT, PRICE_API
-from .helpers import headers, is_cached, utc_to_dk
+from .helpers import headers, utc_to_dk
 
 
 def price(self) -> dict:
     """Get the price forecast."""
-    if is_cached(self._cached_forecast_price):
-        return self._cached_forecast_price["data"]
+    if self._cache.is_cached("forecast_price"):
+        return self._cache.get("forecast_price")
 
     r = requests.get(
         f"{PRICE_API}/forward-prices/{self._zip_code}",
@@ -64,18 +64,15 @@ def price(self) -> dict:
         }
 
     # "cache" the result, as it only changes every hour 00:00
-    self._cached_forecast_price = {
-        "cached_hour": datetime.datetime.now().hour,
-        "data": prices,
-    }
+    self._cache.set("forecast_price", prices)
 
     return prices
 
 
 def climate(self) -> dict:
     """Get the climate forecast."""
-    if is_cached(self._cached_forecast_climate):
-        return self._cached_forecast_climate["data"]
+    if self._cache.is_cached("forecast_climate"):
+        return self._cache.get("forecast_climate")
 
     r = requests.get(
         f"{CLIMATE_API}/energydata/DK-{self._grid_area}",
@@ -138,9 +135,6 @@ def climate(self) -> dict:
         }
 
     # "cache" the result, as it only changes every hour 00:00
-    self._cached_forecast_climate = {
-        "cached_hour": datetime.datetime.now().hour,
-        "data": climates,
-    }
+    self._cache.set("forecast_climate", climates)
 
     return climates

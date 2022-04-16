@@ -97,23 +97,6 @@ def add_ints_avg(raw_list: list) -> set:
     return (round(num, 2), estimate)
 
 
-def is_cached(cache_obj: dict) -> bool:
-    """Check if `cache_obj` is cached.
-
-    :param cache_obj: an instance variable where data could be cached
-    :type cache_obj: dict
-    :rtype: bool
-    """
-    if len(cache_obj) > 0:
-        hour = datetime.datetime.now().hour
-        if hour == 0 and cache_obj["cached_hour"] != 0:
-            return False
-        else:
-            return True
-    else:
-        return False
-
-
 def get_timestamp(t: Union[str, int]) -> str:
     """
     Return `t` or the timestamp at hour `t` if only an hour was provided.

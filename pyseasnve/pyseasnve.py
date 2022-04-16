@@ -17,6 +17,7 @@ class PySeasNVE:
     )
 
     def __init__(self, username, password):
+        from .cache import cache
         from .helpers import init_vars, login
 
         self.username = username
@@ -27,13 +28,7 @@ class PySeasNVE:
         self._zip_code = ""
         self._public_ip = ""
         self._external_id = ""
-        self._cached_forecast_price = {}
-        self._cached_forecast_climate = {}
-        self._cached_consumption_hourly = {}
-        self._cached_consumption_daily = {}
-        self._cached_consumption_weekly = {}
-        self._cached_consumption_monthly = {}
-        self._cached_consumption_yearly = {}
+        self._cache = cache()
 
         # Properties
         self._accommodation_type = ""
@@ -85,6 +80,8 @@ class DummyPySeasNVE:
     )
 
     def __init__(self, username, password):
+        from .cache import cache
+
         self.username = username
 
         self._token = "dummy_token"
@@ -94,10 +91,4 @@ class DummyPySeasNVE:
         self._accommodation_type = "apartment"
         self._motivation = "both"
         self._external_id = "123-123"
-        self._cached_forecast_climate = {}
-        self._cached_forecast_price = {}
-        self._cached_consumption_hourly = {}
-        self._cached_consumption_daily = {}
-        self._cached_consumption_weekly = {}
-        self._cached_consumption_monthly = {}
-        self._cached_consumption_yearly = {}
+        self._cache = cache()
